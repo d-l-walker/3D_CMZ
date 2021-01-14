@@ -1,1 +1,3 @@
 # 3D_CMZ
+
+Created repo. Going to push local scripts when I get time ...
