@@ -28,7 +28,7 @@ v_cen_guess2 = {1: '-20', 6: '28', 7: '74', 15: '35', 21: '8'}
 fwhm_guess2 = {1: '30', 6: '35', 7: '38', 15: '32', 21: '30'}
 
 # Loop through all leaves to fit HNCO spectra
-for i in range(15,16):
+for i in range(1,23):
     if i in amp_guess2:
         guess = [amp_guess[i], v_cen_guess[i], fwhm_guess[i]] + [amp_guess2[i],
                 v_cen_guess2[i], fwhm_guess2[i]]
