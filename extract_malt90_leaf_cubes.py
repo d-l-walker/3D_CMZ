@@ -14,7 +14,6 @@ from astropy import wcs
 from astropy.io import fits
 from astropy import units as u
 from astropy import constants as const
-from astropy.nddata import Cutout2D
 from spectral_cube import SpectralCube
 import spectral_cube
 # _____________________________________
