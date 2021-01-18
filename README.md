@@ -1,3 +1,3 @@
-# 3D_CMZ
+# 3-D CMZ
 
-Created repo. Going to push local scripts when I get time ...
+Repo for project aiming to better contstrain the 3-dimensional structure of the Milk Way's Central Molecular Zone (CMZ).
