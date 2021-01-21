@@ -83,7 +83,7 @@ dend_brick = astrodendro.Dendrogram.load_from("./../Dendrogram_files/separate_br
 leaves_brick = dend_brick.leaves[-5]
 
 # Compute dendrogram for HiGAL column density map
-dend = astrodendro.Dendrogram.compute(data, wcs=mywcs, min_value=2e22, min_delta=5e22, min_npix=10)
+dend = astrodendro.Dendrogram.compute(data, wcs=mywcs, min_value=2e22, min_delta=5e22, min_npix=100)
 dend.save_to('./../Dendrogram_files/clouds_only_dendrogram.hdf5')
 dend.save_to('./../Dendrogram_files/clouds_only_dendrogram.fits')
 leaves = dend.leaves[9:(len(dend.leaves)-3)]
