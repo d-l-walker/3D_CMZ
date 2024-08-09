@@ -28,10 +28,10 @@ def plot_interactive(model, catalogue, view='3d'):
         layout = dict(scene=dict(xaxis_title="l", yaxis_title="b", zaxis_title="v"))
     elif view == 'l-b':
         trace_func = go.Scatter
-        layout = dict(xaxis_title="l", yaxis_title="b")
+        layout = dict(xaxis_title="l", yaxis_title="b", xaxis_autorange="reversed")
     elif view == 'l-v':
         trace_func = go.Scatter
-        layout = dict(xaxis_title="l", yaxis_title="v")
+        layout = dict(xaxis_title="l", yaxis_title="v", xaxis_autorange="reversed")
     elif view == 'b-v':
         trace_func = go.Scatter
         layout = dict(xaxis_title="b", yaxis_title="v")
