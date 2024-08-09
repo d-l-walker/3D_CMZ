@@ -11,7 +11,7 @@ def load_data(path, sep='\t', names=['l', 'b', 'v', 'near_far']):
         full_path = os.path.join(current_dir, 'data', path)
         return pd.read_csv(full_path, sep=sep, header=None, names=names)
     except FileNotFoundError:
-        st.error(f"Error: The file {full_path} was not found. Please check if the file exists in the 'data' folder.")
+        st.error(f"Error: The file {path} was not found in the data folder.")
         return None
 
 def preprocess_data(df):
@@ -56,16 +56,6 @@ def plot_interactive_3d(models, catalogue):
 
 def main():
     st.title("3D Model Comparison")
-
-    st.write("Current working directory:", os.getcwd())
-    st.write("Script directory:", current_dir)
-    st.write("Contents of the script directory:")
-    st.write(os.listdir(current_dir))
-    st.write("Contents of the data folder:")
-    try:
-        st.write(os.listdir(os.path.join(current_dir, 'data')))
-    except FileNotFoundError:
-        st.write("data folder not found")
 
     catalogue = preprocess_data(load_data('updated-catalogue.txt', sep=','))
 
