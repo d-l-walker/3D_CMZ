@@ -4,9 +4,11 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import os
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
 def load_data(path, sep='\t', names=['l', 'b', 'v', 'near_far']):
     try:
-        full_path = os.path.join(os.getcwd(), path)
+        full_path = os.path.join(current_dir, 'data', path)
         return pd.read_csv(full_path, sep=sep, header=None, names=names)
     except FileNotFoundError:
         st.error(f"Error: The file {full_path} was not found. Please check if the file exists in the 'data' folder.")
@@ -56,21 +58,22 @@ def main():
     st.title("3D Model Comparison")
 
     st.write("Current working directory:", os.getcwd())
-    st.write("Contents of the current directory:")
-    st.write(os.listdir())
+    st.write("Script directory:", current_dir)
+    st.write("Contents of the script directory:")
+    st.write(os.listdir(current_dir))
     st.write("Contents of the data folder:")
     try:
-        st.write(os.listdir("data"))
+        st.write(os.listdir(os.path.join(current_dir, 'data')))
     except FileNotFoundError:
         st.write("data folder not found")
 
-    catalogue = preprocess_data(load_data('data/updated-catalogue.txt', sep=','))
+    catalogue = preprocess_data(load_data('updated-catalogue.txt', sep=','))
 
     model_files = [
-        ('data/molinari_resampled_300.txt', '\t', "Molinari"),
-        ('data/sofue_resampled_300.txt', '\t', "Sofue"),
-        ('data/kdl_resampled_300.txt', '\t', "KDL"),
-        ('data/ellipse_resampled_300.txt', '\t', "Ellipse")
+        ('molinari_resampled_300.txt', '\t', "Molinari"),
+        ('sofue_resampled_300.txt', '\t', "Sofue"),
+        ('kdl_resampled_300.txt', '\t', "KDL"),
+        ('ellipse_resampled_300.txt', '\t', "Ellipse")
     ]
 
     models = [
