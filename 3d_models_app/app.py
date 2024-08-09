@@ -6,9 +6,10 @@ import os
 
 def load_data(path, sep='\t', names=['l', 'b', 'v', 'near_far']):
     try:
-        return pd.read_csv(path, sep=sep, header=None, names=names)
+        full_path = os.path.join(os.getcwd(), path)
+        return pd.read_csv(full_path, sep=sep, header=None, names=names)
     except FileNotFoundError:
-        st.error(f"Error: The file {path} was not found. Please check if the file exists in the 'data' folder.")
+        st.error(f"Error: The file {full_path} was not found. Please check if the file exists in the 'data' folder.")
         return None
 
 def preprocess_data(df):
@@ -54,19 +55,28 @@ def plot_interactive_3d(models, catalogue):
 def main():
     st.title("3D Model Comparison")
 
-    catalogue = preprocess_data(load_data(os.path.join('data', 'updated-catalogue.txt'), sep=','))
+    st.write("Current working directory:", os.getcwd())
+    st.write("Contents of the current directory:")
+    st.write(os.listdir())
+    st.write("Contents of the data folder:")
+    try:
+        st.write(os.listdir("data"))
+    except FileNotFoundError:
+        st.write("data folder not found")
+
+    catalogue = preprocess_data(load_data('data/updated-catalogue.txt', sep=','))
 
     model_files = [
-        ('molinari_resampled_300.txt', '\t', "Molinari"),
-        ('sofue_resampled_300.txt', '\t', "Sofue"),
-        ('kdl_resampled_300.txt', '\t', "KDL"),
-        ('ellipse_resampled_300.txt', '\t', "Ellipse")
+        ('data/molinari_resampled_300.txt', '\t', "Molinari"),
+        ('data/sofue_resampled_300.txt', '\t', "Sofue"),
+        ('data/kdl_resampled_300.txt', '\t', "KDL"),
+        ('data/ellipse_resampled_300.txt', '\t', "Ellipse")
     ]
 
     models = [
         {
             'name': name,
-            'data': preprocess_data(load_data(os.path.join('data', file), sep))
+            'data': preprocess_data(load_data(file, sep))
         }
         for file, sep, name in model_files
     ]
