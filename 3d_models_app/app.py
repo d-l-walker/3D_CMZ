@@ -3,11 +3,14 @@ import pandas as pd
 import plotly.graph_objects as go
 import os
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
 def load_data(path, sep='\t', names=['l', 'b', 'v', 'near_far']):
     try:
-        return pd.read_csv(path, sep=sep, header=None, names=names)
+        full_path = os.path.join(current_dir, 'data', path)
+        return pd.read_csv(full_path, sep=sep, header=None, names=names)
     except FileNotFoundError:
-        st.error(f"Error: The file {path} was not found. Please check if the file exists in the 'data' folder.")
+        st.error(f"Error: The file {path} was not found in the data folder.")
         return None
 
 def preprocess_data(df):
@@ -20,7 +23,6 @@ def preprocess_data(df):
 def plot_interactive_3d(model, catalogue):
     fig = go.Figure()
     
-    # Add model data
     fig.add_trace(
         go.Scatter3d(
             x=model['data']['l'], y=model['data']['b'], z=model['data']['v'],
@@ -36,7 +38,6 @@ def plot_interactive_3d(model, catalogue):
         )
     )
     
-    # Add catalogue data
     fig.add_trace(
         go.Scatter3d(
             x=catalogue['l'], y=catalogue['b'], z=catalogue['v'],
@@ -63,7 +64,7 @@ def plot_interactive_3d(model, catalogue):
 def main():
     st.title("3D Model Comparison")
 
-    catalogue = preprocess_data(load_data(os.path.join('data', 'updated-catalogue.txt'), sep=','))
+    catalogue = preprocess_data(load_data('updated-catalogue.txt', sep=','))
 
     model_files = [
         ('molinari_resampled_300.txt', '\t', "Molinari"),
@@ -75,7 +76,7 @@ def main():
     models = [
         {
             'name': name,
-            'data': preprocess_data(load_data(os.path.join('data', file), sep))
+            'data': preprocess_data(load_data(file, sep))
         }
         for file, sep, name in model_files
     ]
