@@ -1,17 +1,13 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import os
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
 
 def load_data(path, sep='\t', names=['l', 'b', 'v', 'near_far']):
     try:
-        full_path = os.path.join(current_dir, 'data', path)
-        return pd.read_csv(full_path, sep=sep, header=None, names=names)
+        return pd.read_csv(path, sep=sep, header=None, names=names)
     except FileNotFoundError:
-        st.error(f"Error: The file {path} was not found in the data folder.")
+        st.error(f"Error: The file {path} was not found. Please check if the file exists in the 'data' folder.")
         return None
 
 def preprocess_data(df):
@@ -21,43 +17,53 @@ def preprocess_data(df):
     df['near_far_numeric'] = df['near_far'].map({'Near': 0, 'Far': 1})
     return df
 
-def plot_interactive_3d(models, catalogue):
-    fig = make_subplots(
-        rows=1, cols=len(models),
-        specs=[[{'type': 'scene'}]*len(models)],
-        subplot_titles=[model['name'] for model in models]
+def plot_interactive_3d(model, catalogue):
+    fig = go.Figure()
+    
+    # Add model data
+    fig.add_trace(
+        go.Scatter3d(
+            x=model['data']['l'], y=model['data']['b'], z=model['data']['v'],
+            mode='markers',
+            marker=dict(
+                size=5,
+                color=model['data']['near_far_numeric'],
+                colorscale='RdBu_r',
+                symbol='circle',
+                opacity=0.8
+            ),
+            name=f'Model {model["name"]}'
+        )
     )
-    for i, model in enumerate(models, start=1):
-        model_data = model['data']
-        if model_data is None:
-            continue
-        for data, name, symbol in [(model_data, f'Model {model["name"]}', 'circle'),
-                                   (catalogue, 'Catalogue', 'x')]:
-            if data is None:
-                continue
-            fig.add_trace(
-                go.Scatter3d(
-                    x=data['l'], y=data['b'], z=data['v'],
-                    mode='markers',
-                    marker=dict(
-                        size=5,
-                        color=data['near_far_numeric'],
-                        colorscale='RdBu_r',
-                        symbol=symbol,
-                        opacity=0.8
-                    ),
-                    name=name
-                ),
-                row=1, col=i
-            )
-        fig.update_scenes(xaxis_autorange="reversed", row=1, col=i)
-    fig.update_layout(height=800, width=800*len(models), title_text="3D Model Comparison")
+    
+    # Add catalogue data
+    fig.add_trace(
+        go.Scatter3d(
+            x=catalogue['l'], y=catalogue['b'], z=catalogue['v'],
+            mode='markers',
+            marker=dict(
+                size=5,
+                color=catalogue['near_far_numeric'],
+                colorscale='RdBu_r',
+                symbol='x',
+                opacity=0.8
+            ),
+            name='Catalogue'
+        )
+    )
+    
+    fig.update_layout(
+        scene=dict(xaxis_autorange="reversed"),
+        height=800,
+        width=800,
+        title_text=f"3D Model Comparison - {model['name']}"
+    )
     return fig
 
 def main():
     st.title("3D Model Comparison")
 
-    catalogue = preprocess_data(load_data('updated-catalogue.txt', sep=','))
+    catalogue = preprocess_data(load_data(os.path.join('data', 'updated-catalogue.txt'), sep=','))
 
     model_files = [
         ('molinari_resampled_300.txt', '\t', "Molinari"),
@@ -69,7 +75,7 @@ def main():
     models = [
         {
             'name': name,
-            'data': preprocess_data(load_data(file, sep))
+            'data': preprocess_data(load_data(os.path.join('data', file), sep))
         }
         for file, sep, name in model_files
     ]
@@ -78,8 +84,18 @@ def main():
         st.error("No data files could be loaded. Please check if the data files are present in the 'data' folder.")
         return
 
-    fig = plot_interactive_3d(models, catalogue)
-    st.plotly_chart(fig, use_container_width=True)
+    selected_model_name = st.selectbox(
+        "Select a model to view:",
+        options=[model['name'] for model in models]
+    )
+
+    selected_model = next((model for model in models if model['name'] == selected_model_name), None)
+
+    if selected_model:
+        fig = plot_interactive_3d(selected_model, catalogue)
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.error("Selected model not found.")
 
 if __name__ == "__main__":
     main()
