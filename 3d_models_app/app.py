@@ -66,7 +66,7 @@ def main():
     models = [
         {
             'name': name,
-            'data': preprocess_data(load_data(os.path.join('data', file), sep))
+            'data': preprocess_data(load_data(os.path.join('./data', file), sep))
         }
         for file, sep, name in model_files
     ]
