@@ -28,13 +28,19 @@ def plot_interactive_3d(model, catalogue):
             x=model['data']['l'], y=model['data']['b'], z=model['data']['v'],
             mode='markers',
             marker=dict(
-                size=5,
+                size=6,
                 color=model['data']['near_far_numeric'],
-                colorscale='RdBu_r',
+                colorscale='RdBu',
                 symbol='circle',
-                opacity=0.8
+                opacity=0.8,
+                colorbar=dict(
+                    title='Near/Far',
+                    tickvals=[0, 1],
+                    ticktext=['Near', 'Far']
+                )
             ),
-            name=f'Model {model["name"]}'
+            name=f'Model {model["name"]}',
+            hovertemplate='<b>Model Point</b><br>l: %{x:.2f}<br>b: %{y:.2f}<br>v: %{z:.2f}<extra></extra>'
         )
     )
     
@@ -43,22 +49,67 @@ def plot_interactive_3d(model, catalogue):
             x=catalogue['l'], y=catalogue['b'], z=catalogue['v'],
             mode='markers',
             marker=dict(
-                size=5,
+                size=6,
                 color=catalogue['near_far_numeric'],
-                colorscale='RdBu_r',
+                colorscale='RdBu',
                 symbol='x',
                 opacity=0.8
             ),
-            name='Catalogue'
+            name='Catalogue',
+            hovertemplate='<b>Catalogue Point</b><br>l: %{x:.2f}<br>b: %{y:.2f}<br>v: %{z:.2f}<extra></extra>'
         )
     )
     
     fig.update_layout(
-        scene=dict(xaxis_autorange="reversed"),
-        height=800,
+        scene=dict(
+            xaxis_title='l',
+            yaxis_title='b',
+            zaxis_title='v',
+            xaxis_autorange="reversed",
+            bgcolor='rgb(240,240,240)'
+        ),
+        height=700,
         width=800,
-        title_text=f"3D Model Comparison - {model['name']}"
+        title=dict(
+            text=f"3D Model Comparison - {model['name']}",
+            x=0.5,
+            y=0.95,
+            font=dict(size=24)
+        ),
+        legend=dict(
+            x=0.85,
+            y=0.95,
+            bgcolor='rgba(255,255,255,0.5)'
+        ),
+        margin=dict(l=0, r=0, b=0, t=50)
     )
+    
+    fig.update_layout(
+        updatemenus=[
+            dict(
+                type="buttons",
+                direction="left",
+                buttons=list([
+                    dict(args=[{'scene.camera.eye': {'x': 1.25, 'y': 1.25, 'z': 1.25}}],
+                         label="Isometric",
+                         method="relayout"),
+                    dict(args=[{'scene.camera.eye': {'x': 0, 'y': 0, 'z': 2}}],
+                         label="Top",
+                         method="relayout"),
+                    dict(args=[{'scene.camera.eye': {'x': 2, 'y': 0, 'z': 0}}],
+                         label="Side",
+                         method="relayout")
+                ]),
+                pad={"r": 10, "t": 10},
+                showactive=True,
+                x=0.05,
+                xanchor="left",
+                y=1.1,
+                yanchor="top"
+            ),
+        ]
+    )
+    
     return fig
 
 def main():
