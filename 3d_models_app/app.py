@@ -54,7 +54,7 @@ def plot_interactive_3d(model, catalogue):
     )
     
     fig.update_layout(
-        scene=dict(xaxis_autorange="reversed"),
+        scene=dict(xaxis_title="l", yaxis_title="b", zaxis_title="v", xaxis_autorange=True),
         height=800,
         width=800,
         title_text=f"3D Model Comparison - {model['name']}"
