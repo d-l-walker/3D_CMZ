@@ -20,49 +20,56 @@ def preprocess_data(df):
     df['near_far_numeric'] = df['near_far'].map({'Near': 0, 'Far': 1})
     return df
 
-def plot_interactive_3d(model, catalogue):
+def plot_interactive(model, catalogue, view='3d'):
     fig = go.Figure()
     
-    fig.add_trace(
-        go.Scatter3d(
-            x=model['data']['l'], y=model['data']['b'], z=model['data']['v'],
-            mode='markers',
-            marker=dict(
-                size=5,
-                color=model['data']['near_far_numeric'],
-                colorscale='RdBu_r',
-                symbol='circle',
-                opacity=0.8
-            ),
-            name=f'Model {model["name"]}'
-        )
-    )
+    if view == '3d':
+        trace_func = go.Scatter3d
+        layout = dict(scene=dict(xaxis_title="l", yaxis_title="b", zaxis_title="v"))
+    elif view == 'l-b':
+        trace_func = go.Scatter
+        layout = dict(xaxis_title="l", yaxis_title="b")
+    elif view == 'l-v':
+        trace_func = go.Scatter
+        layout = dict(xaxis_title="l", yaxis_title="v")
+    elif view == 'b-v':
+        trace_func = go.Scatter
+        layout = dict(xaxis_title="b", yaxis_title="v")
     
-    fig.add_trace(
-        go.Scatter3d(
-            x=catalogue['l'], y=catalogue['b'], z=catalogue['v'],
-            mode='markers',
-            marker=dict(
-                size=5,
-                color=catalogue['near_far_numeric'],
-                colorscale='RdBu_r',
-                symbol='x',
-                opacity=0.8
-            ),
-            name='Catalogue'
-        )
-    )
+    def add_trace(data, name, symbol):
+        if view == '3d':
+            return trace_func(
+                x=data['l'], y=data['b'], z=data['v'],
+                mode='markers',
+                marker=dict(
+                    size=5,
+                    color=data['near_far_numeric'],
+                    colorscale='RdBu_r',
+                    symbol=symbol,
+                    opacity=0.8
+                ),
+                name=name
+            )
+        elif view == 'l-b':
+            return trace_func(x=data['l'], y=data['b'], mode='markers', marker=dict(size=5, color=data['near_far_numeric'], colorscale='RdBu_r', symbol=symbol, opacity=0.8), name=name)
+        elif view == 'l-v':
+            return trace_func(x=data['l'], y=data['v'], mode='markers', marker=dict(size=5, color=data['near_far_numeric'], colorscale='RdBu_r', symbol=symbol, opacity=0.8), name=name)
+        elif view == 'b-v':
+            return trace_func(x=data['b'], y=data['v'], mode='markers', marker=dict(size=5, color=data['near_far_numeric'], colorscale='RdBu_r', symbol=symbol, opacity=0.8), name=name)
+    
+    fig.add_trace(add_trace(model['data'], f'Model {model["name"]}', 'circle'))
+    fig.add_trace(add_trace(catalogue, 'Catalogue', 'x'))
     
     fig.update_layout(
-        scene=dict(xaxis_title="l", yaxis_title="b", zaxis_title="v", xaxis_autorange=True),
         height=800,
         width=800,
-        title_text=f"3D Model Comparison - {model['name']}"
+        title_text=f"Model Comparison - {model['name']} ({view.upper()} view)",
+        **layout
     )
     return fig
 
 def main():
-    st.title("3D Model Comparison")
+    st.title("Model Comparison")
 
     catalogue = preprocess_data(load_data('updated-catalogue.txt', sep=','))
 
@@ -92,8 +99,11 @@ def main():
 
     selected_model = next((model for model in models if model['name'] == selected_model_name), None)
 
+    view_options = ['3d', 'l-b', 'l-v', 'b-v']
+    selected_view = st.radio("Select view:", view_options, index=0)
+
     if selected_model:
-        fig = plot_interactive_3d(selected_model, catalogue)
+        fig = plot_interactive(selected_model, catalogue, view=selected_view)
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.error("Selected model not found.")
