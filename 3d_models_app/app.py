@@ -66,7 +66,8 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
     fig.add_trace(add_trace(catalogue['data'], f'Data: {catalogue["name"]}', catalogue['symbol']))
 
     fig.update_layout(
-        height=600,
+        height=800,
+        width=800,
         title_text=f"{model['name']} {view} view",
         margin=dict(l=0, r=0, t=40, b=0),
         **layout
@@ -112,7 +113,7 @@ def main():
     if 'selected_catalogue_index' not in st.session_state:
         st.session_state.selected_catalogue_index = random.randint(0, len(catalogues) - 1)
 
-        col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
     with col1:
         selected_model_name = st.selectbox(
@@ -135,9 +136,10 @@ def main():
 
     if selected_model and selected_catalogue:
         fig = plot_interactive(selected_model, selected_catalogue, view=selected_view)
-        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+        st.plotly_chart(fig, use_container_width=True)
     else:
         st.error("Selected model or catalogue not found.")
+
 
 if __name__ == "__main__":
     main()
