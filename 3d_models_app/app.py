@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import os
+import random
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -20,7 +21,7 @@ def preprocess_data(df):
     df['near_far_numeric'] = df['near_far'].map({'Near': 0, 'Far': 1})
     return df
 
-def plot_interactive(model, catalogues, view='3-D (l-b-v)'):
+def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
     fig = go.Figure()
     
     if view == '3-D (l-b-v)':
@@ -58,8 +59,7 @@ def plot_interactive(model, catalogues, view='3-D (l-b-v)'):
             return trace_func(x=data['b'], y=data['v'], mode='markers', marker=dict(size=5, color=data['near_far_numeric'], colorscale='RdBu_r', symbol=symbol, opacity=0.8), name=name)
     
     fig.add_trace(add_trace(model['data'], f'Model: {model["name"]}', 'circle'))
-    for catalogue in catalogues:
-        fig.add_trace(add_trace(catalogue['data'], f'Data: {catalogue["name"]}', catalogue['symbol']))
+    fig.add_trace(add_trace(catalogue['data'], f'Data: {catalogue["name"]}', catalogue['symbol']))
     
     fig.update_layout(
         height=800,
@@ -75,7 +75,7 @@ def main():
     catalogues = [
         {
             'name': 'Walker et al. 2024',
-            'data': preprocess_data(load_data('walker-catalogue.txt', sep=',')),
+            'data': preprocess_data(load_data('updated-catalogue.txt', sep=',')),
             'symbol': 'x'
         },
         {
@@ -104,6 +104,9 @@ def main():
         st.error("No data files could be loaded. Please check if the data files are present in the 'data' folder.")
         return
 
+    if 'selected_catalogue_index' not in st.session_state:
+        st.session_state.selected_catalogue_index = random.randint(0, len(catalogues) - 1)
+
     selected_model_name = st.selectbox(
         "Select a model to view:",
         options=[model['name'] for model in models]
@@ -114,18 +117,19 @@ def main():
     view_options = ['3-D (l-b-v)', 'l-b', 'l-v', 'b-v']
     selected_view = st.radio("Select view:", view_options, index=0)
 
-    selected_catalogues = st.multiselect(
-        "Select catalogues to display:",
+    selected_catalogue_name = st.selectbox(
+        "Select catalogue to display:",
         options=[catalogue['name'] for catalogue in catalogues],
-        default=[catalogue['name'] for catalogue in catalogues]
+        index=st.session_state.selected_catalogue_index
     )
 
-    if selected_model:
-        displayed_catalogues = [catalogue for catalogue in catalogues if catalogue['name'] in selected_catalogues]
-        fig = plot_interactive(selected_model, displayed_catalogues, view=selected_view)
+    selected_catalogue = next((catalogue for catalogue in catalogues if catalogue['name'] == selected_catalogue_name), None)
+
+    if selected_model and selected_catalogue:
+        fig = plot_interactive(selected_model, selected_catalogue, view=selected_view)
         st.plotly_chart(fig, use_container_width=True)
     else:
-        st.error("Selected model not found.")
+        st.error("Selected model or catalogue not found.")
 
 if __name__ == "__main__":
     main()
