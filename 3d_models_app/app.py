@@ -64,7 +64,7 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
     fig.update_layout(
         height=800,
         width=800,
-        title_text=f"{model['name']} ({view.upper()} view)",
+        title_text=f"{model['name']} {view()} view",
         **layout
     )
     return fig
