@@ -20,7 +20,7 @@ def preprocess_data(df):
     df['near_far_numeric'] = df['near_far'].map({'Near': 0, 'Far': 1})
     return df
 
-def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
+def plot_interactive(model, catalogues, view='3-D (l-b-v)'):
     fig = go.Figure()
     
     if view == '3-D (l-b-v)':
@@ -58,7 +58,8 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
             return trace_func(x=data['b'], y=data['v'], mode='markers', marker=dict(size=5, color=data['near_far_numeric'], colorscale='RdBu_r', symbol=symbol, opacity=0.8), name=name)
     
     fig.add_trace(add_trace(model['data'], f'Model: {model["name"]}', 'circle'))
-    fig.add_trace(add_trace(catalogue, 'Data: Walker et al. 2024', 'x'))
+    for catalogue in catalogues:
+        fig.add_trace(add_trace(catalogue['data'], f'Data: {catalogue["name"]}', catalogue['symbol']))
     
     fig.update_layout(
         height=800,
@@ -71,7 +72,18 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
 def main():
     st.title("3-D CMZ Models")
 
-    catalogue = preprocess_data(load_data('updated-catalogue.txt', sep=','))
+    catalogues = [
+        {
+            'name': 'Walker et al. 2024',
+            'data': preprocess_data(load_data('walker-catalogue.txt', sep=',')),
+            'symbol': 'x'
+        },
+        {
+            'name': 'Lipman et al. 2024',
+            'data': preprocess_data(load_data('lipman-catalogue.txt', sep=',')),
+            'symbol': 'diamond'
+        }
+    ]
 
     model_files = [
         ('ellipse_resampled_300.txt', '\t', "Ellipse"),
@@ -88,7 +100,7 @@ def main():
         for file, sep, name in model_files
     ]
 
-    if catalogue is None and all(model['data'] is None for model in models):
+    if all(catalogue['data'] is None for catalogue in catalogues) and all(model['data'] is None for model in models):
         st.error("No data files could be loaded. Please check if the data files are present in the 'data' folder.")
         return
 
@@ -102,8 +114,15 @@ def main():
     view_options = ['3-D (l-b-v)', 'l-b', 'l-v', 'b-v']
     selected_view = st.radio("Select view:", view_options, index=0)
 
+    selected_catalogues = st.multiselect(
+        "Select catalogues to display:",
+        options=[catalogue['name'] for catalogue in catalogues],
+        default=[catalogue['name'] for catalogue in catalogues]
+    )
+
     if selected_model:
-        fig = plot_interactive(selected_model, catalogue, view=selected_view)
+        displayed_catalogues = [catalogue for catalogue in catalogues if catalogue['name'] in selected_catalogues]
+        fig = plot_interactive(selected_model, displayed_catalogues, view=selected_view)
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.error("Selected model not found.")
