@@ -112,6 +112,7 @@ def main():
     if 'selected_catalogue_index' not in st.session_state:
         st.session_state.selected_catalogue_index = random.randint(0, len(catalogues) - 1)
 
+
     col1, col2 = st.columns(2)
 
     with col1:
@@ -135,10 +136,16 @@ def main():
 
     if selected_model and selected_catalogue:
         fig = plot_interactive(selected_model, selected_catalogue, view=selected_view)
-        st.plotly_chart(fig, use_container_width=True)
+        
+        fig.update_layout(
+            autosize=True,
+            margin=dict(l=0, r=0, t=30, b=0),
+            height=700,
+        )
+
+        st.plotly_chart(fig, use_container_width=True, config={'responsive': True})
     else:
         st.error("Selected model or catalogue not found.")
-
 
 if __name__ == "__main__":
     main()
