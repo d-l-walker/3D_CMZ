@@ -203,14 +203,14 @@ def main():
         st.error("Selected model or catalogue not found.")
 
     st.markdown("""
-    This interactive tool shows four models of the 3-D geometry of the CMZ. In all cases, blue points represent the near side of the CMZ, while red points represent the far side. The models are:
+    This interactive tool shows four models of the 3-D geometry of the CMZ. Blue points represent the near side of the CMZ, while red points represent the far side. The models are:
                 
     * An open, eccentric orbit (KDL; [Kruijssen et al. 2014](#))
     * Two nuclear spiral arms (Sofue; [Sofue et al. 1995](#))
     * A closed, vertically-oscillating elliptical orbit with constant angular momentum (Ellipse; [Walker et al. 2024](#))
     * A closed, vertically-oscillating elliptical orbit with constant orbital velocity (Molinari; [Molinari et al. 2011](#))
 
-    Along with two CMZ cloud catalogues from [Lipman et al. (2024)](#) and [Walker et al. (2024)](#).
+    Overlaid as 'x' markers are two CMZ cloud catalogues from [Lipman et al. (2024)](#) and [Walker et al. (2024)](#). The marker colour indicates whether the cloud is determined to be on the near (blue) or far (red) side of the CMZ. Please see the associated publications for more information on the models and catalogues, and a detailed comparison between them.
 
     For more information on the 3-D CMZ project and associated data, code, and publications, please visit [centralmolecularzone.github.io/3D_CMZ/](https://centralmolecularzone.github.io/3D_CMZ/)
     """)
