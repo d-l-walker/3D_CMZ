@@ -112,23 +112,26 @@ def main():
     if 'selected_catalogue_index' not in st.session_state:
         st.session_state.selected_catalogue_index = random.randint(0, len(catalogues) - 1)
 
-    selected_model_name = st.selectbox(
-        "Select a model to view:",
-        options=[model['name'] for model in models]
-    )
+    col1, col2 = st.columns(2)
+
+    with col1:
+        selected_model_name = st.selectbox(
+            "Select a model to view:",
+            options=[model['name'] for model in models]
+        )
+
+    with col2:
+        selected_catalogue_name = st.selectbox(
+            "Select catalogue to display:",
+            options=[catalogue['name'] for catalogue in catalogues],
+            index=st.session_state.selected_catalogue_index
+        )
 
     selected_model = next((model for model in models if model['name'] == selected_model_name), None)
+    selected_catalogue = next((catalogue for catalogue in catalogues if catalogue['name'] == selected_catalogue_name), None)
 
     view_options = ['3-D (l-b-v)', 'l-b', 'l-v', 'b-v']
     selected_view = st.radio("Select view:", view_options, index=0)
-
-    selected_catalogue_name = st.selectbox(
-        "Select catalogue to display:",
-        options=[catalogue['name'] for catalogue in catalogues],
-        index=st.session_state.selected_catalogue_index
-    )
-
-    selected_catalogue = next((catalogue for catalogue in catalogues if catalogue['name'] == selected_catalogue_name), None)
 
     if selected_model and selected_catalogue:
         fig = plot_interactive(selected_model, selected_catalogue, view=selected_view)
