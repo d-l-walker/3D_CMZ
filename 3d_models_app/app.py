@@ -6,6 +6,7 @@ import random
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
+
 def load_data(path, sep='\t', names=['l', 'b', 'v', 'near_far']):
     try:
         full_path = os.path.join(current_dir, 'data', path)
@@ -14,6 +15,7 @@ def load_data(path, sep='\t', names=['l', 'b', 'v', 'near_far']):
         st.error(f"Error: The file {path} was not found in the data folder.")
         return None
 
+
 def preprocess_data(df):
     if df is None:
         return None
@@ -21,9 +23,10 @@ def preprocess_data(df):
     df['near_far_numeric'] = df['near_far'].map({'Near': 0, 'Far': 1})
     return df
 
+
 def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
     fig = go.Figure()
-    
+
     if view == '3-D (l-b-v)':
         trace_func = go.Scatter3d
         layout = dict(scene=dict(xaxis_title="l", yaxis_title="b", zaxis_title="v"))
@@ -36,7 +39,8 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
     elif view == 'b-v':
         trace_func = go.Scatter
         layout = dict(xaxis_title="b", yaxis_title="v")
-    
+
+
     def add_trace(data, name, symbol):
         if view == '3-D (l-b-v)':
             return trace_func(
@@ -57,10 +61,10 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
             return trace_func(x=data['l'], y=data['v'], mode='markers', marker=dict(size=5, color=data['near_far_numeric'], colorscale='RdBu_r', symbol=symbol, opacity=0.8), name=name)
         elif view == 'b-v':
             return trace_func(x=data['b'], y=data['v'], mode='markers', marker=dict(size=5, color=data['near_far_numeric'], colorscale='RdBu_r', symbol=symbol, opacity=0.8), name=name)
-    
+
     fig.add_trace(add_trace(model['data'], f'Model: {model["name"]}', 'circle'))
     fig.add_trace(add_trace(catalogue['data'], f'Data: {catalogue["name"]}', catalogue['symbol']))
-    
+
     fig.update_layout(
         height=800,
         width=800,
@@ -69,19 +73,20 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
     )
     return fig
 
+
 def main():
     st.title("3-D CMZ Models")
 
     catalogues = [
         {
-            'name': 'Walker et al. 2024',
+            'name': 'Walker et al. (2024)',
             'data': preprocess_data(load_data('walker-catalogue.txt', sep=',')),
             'symbol': 'x'
         },
         {
-            'name': 'Lipman et al. 2024',
+            'name': 'Lipman et al. (2024)',
             'data': preprocess_data(load_data('lipman-catalogue.txt', sep=',')),
-            'symbol': 'diamond'
+            'symbol': 'x'
         }
     ]
 
@@ -130,6 +135,7 @@ def main():
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.error("Selected model or catalogue not found.")
+
 
 if __name__ == "__main__":
     main()
