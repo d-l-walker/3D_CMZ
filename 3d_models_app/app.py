@@ -74,10 +74,10 @@ def main():
     catalogue = preprocess_data(load_data('updated-catalogue.txt', sep=','))
 
     model_files = [
-        ('molinari_resampled_300.txt', '\t', "Molinari"),
-        ('sofue_resampled_300.txt', '\t', "Sofue"),
+        ('ellipse_resampled_300.txt', '\t', "Ellipse"),
         ('kdl_resampled_300.txt', '\t', "KDL"),
-        ('ellipse_resampled_300.txt', '\t', "Ellipse")
+        ('sofue_resampled_300.txt', '\t', "Sofue"),
+        ('molinari_resampled_300.txt', '\t', "Molinari")
     ]
 
     models = [
