@@ -130,18 +130,6 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
 
 def main():
     st.title("3-D CMZ Models")
-    
-    st.markdown("""
-    This interactive tool shows four models of the 3-D geometry of the CMZ:
-    * A closed, vertically-oscillating elliptical orbit with constant angular momentum (Ellipse; [Walker et al. 2024](#))
-    * An open, eccentric orbit (KDL; [Kruijssen et al. 2024](#))
-    * Two nuclear spiral arms (Sofue; [Sofue et al. 1995](#))
-    * A closed, vertically-oscillating elliptical orbit with constant orbital velocity (Molinari; [Molinari et al. 2011](#))
-
-    Along with two cloud catalogues from [Lipman et al. (2024)](#) and [Walker et al. (2024)](#).
-
-    For more information on the 3-D CMZ project and associated data, code, and publications, please visit [centralmolecularzone.github.io/3D_CMZ/](https://centralmolecularzone.github.io/3D_CMZ/)
-    """)
 
     catalogues = [
         {
@@ -213,6 +201,18 @@ def main():
         st.plotly_chart(fig, use_container_width=True, config={'responsive': True})
     else:
         st.error("Selected model or catalogue not found.")
+
+    st.markdown("""
+    This interactive tool shows four models of the 3-D geometry of the CMZ:
+    * A closed, vertically-oscillating elliptical orbit with constant angular momentum (Ellipse; [Walker et al. 2024](#))
+    * An open, eccentric orbit (KDL; [Kruijssen et al. 2024](#))
+    * Two nuclear spiral arms (Sofue; [Sofue et al. 1995](#))
+    * A closed, vertically-oscillating elliptical orbit with constant orbital velocity (Molinari; [Molinari et al. 2011](#))
+
+    Along with two cloud catalogues from [Lipman et al. (2024)](#) and [Walker et al. (2024)](#).
+
+    For more information on the 3-D CMZ project and associated data, code, and publications, please visit [centralmolecularzone.github.io/3D_CMZ/](https://centralmolecularzone.github.io/3D_CMZ/)
+    """)
 
 if __name__ == "__main__":
     main()
