@@ -66,8 +66,8 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
     fig.add_trace(add_trace(catalogue['data'], f'Data: {catalogue["name"]}', catalogue['symbol']))
 
     fig.update_layout(
-        height=1000,
-        width=1000,
+        height=800,
+        width=800,
         title_text=f"{model['name']} {view} view",
         **layout
     )
