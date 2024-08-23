@@ -172,7 +172,7 @@ def main():
 
     with col1:
         selected_model_name = st.selectbox(
-            "Select a model to view:",
+            "Select a model to display:",
             options=[model['name'] for model in models]
         )
 
