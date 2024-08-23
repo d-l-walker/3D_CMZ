@@ -57,19 +57,19 @@ def plot_interactive(model, catalogue, view='3d'):
         elif view == 'b-v':
             return trace_func(x=data['b'], y=data['v'], mode='markers', marker=dict(size=5, color=data['near_far_numeric'], colorscale='RdBu_r', symbol=symbol, opacity=0.8), name=name)
     
-    fig.add_trace(add_trace(model['data'], f'Model {model["name"]}', 'circle'))
+    fig.add_trace(add_trace(model['data'], f'Model: {model["name"]}', 'circle'))
     fig.add_trace(add_trace(catalogue, 'Catalogue', 'x'))
     
     fig.update_layout(
         height=800,
         width=800,
-        title_text=f"Model Comparison - {model['name']} ({view.upper()} view)",
+        title_text=f"{model['name']} ({view.upper()} view)",
         **layout
     )
     return fig
 
 def main():
-    st.title("Model Comparison")
+    st.title("3-D CMZ Models")
 
     catalogue = preprocess_data(load_data('updated-catalogue.txt', sep=','))
 
