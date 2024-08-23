@@ -20,10 +20,10 @@ def preprocess_data(df):
     df['near_far_numeric'] = df['near_far'].map({'Near': 0, 'Far': 1})
     return df
 
-def plot_interactive(model, catalogue, view='3d'):
+def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
     fig = go.Figure()
     
-    if view == '3d':
+    if view == '3-D (l-b-v)':
         trace_func = go.Scatter3d
         layout = dict(scene=dict(xaxis_title="l", yaxis_title="b", zaxis_title="v"))
     elif view == 'l-b':
@@ -37,7 +37,7 @@ def plot_interactive(model, catalogue, view='3d'):
         layout = dict(xaxis_title="b", yaxis_title="v")
     
     def add_trace(data, name, symbol):
-        if view == '3d':
+        if view == '3-D (l-b-v)':
             return trace_func(
                 x=data['l'], y=data['b'], z=data['v'],
                 mode='markers',
