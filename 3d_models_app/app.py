@@ -58,7 +58,7 @@ def plot_interactive(model, catalogue, view='3d'):
             return trace_func(x=data['b'], y=data['v'], mode='markers', marker=dict(size=5, color=data['near_far_numeric'], colorscale='RdBu_r', symbol=symbol, opacity=0.8), name=name)
     
     fig.add_trace(add_trace(model['data'], f'Model: {model["name"]}', 'circle'))
-    fig.add_trace(add_trace(catalogue, 'Catalogue', 'x'))
+    fig.add_trace(add_trace(catalogue, 'Data: Walker et al. 2024', 'x'))
     
     fig.update_layout(
         height=800,
@@ -99,7 +99,7 @@ def main():
 
     selected_model = next((model for model in models if model['name'] == selected_model_name), None)
 
-    view_options = ['3d', 'l-b', 'l-v', 'b-v']
+    view_options = ['3-D (l-b-v)', 'l-b', 'l-v', 'b-v']
     selected_view = st.radio("Select view:", view_options, index=0)
 
     if selected_model:
