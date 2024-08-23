@@ -29,17 +29,38 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
 
     if view == '3-D (l-b-v)':
         trace_func = go.Scatter3d
-        layout = dict(scene=dict(xaxis_title="l", yaxis_title="b", zaxis_title="v"))
+        layout = dict(
+            scene=dict(
+                xaxis_title="l",
+                yaxis_title="b",
+                zaxis_title="v",
+                camera=dict(
+                    eye=dict(x=1.5, y=1.5, z=1.5),
+                    center=dict(x=0, y=0, z=0)
+                ),
+                aspectmode='cube'
+            )
+        )
     elif view == 'l-b':
         trace_func = go.Scatter
-        layout = dict(xaxis_title="l", yaxis_title="b", xaxis_autorange="reversed")
+        layout = dict(
+            xaxis_title="l",
+            yaxis_title="b",
+            xaxis_autorange="reversed"
+        )
     elif view == 'l-v':
         trace_func = go.Scatter
-        layout = dict(xaxis_title="l", yaxis_title="v", xaxis_autorange="reversed")
+        layout = dict(
+            xaxis_title="l",
+            yaxis_title="v",
+            xaxis_autorange="reversed"
+        )
     elif view == 'b-v':
         trace_func = go.Scatter
-        layout = dict(xaxis_title="b", yaxis_title="v")
-
+        layout = dict(
+            xaxis_title="b",
+            yaxis_title="v"
+        )
 
     def add_trace(data, name, symbol):
         if view == '3-D (l-b-v)':
@@ -55,20 +76,53 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
                 ),
                 name=name
             )
-        elif view == 'l-b':
-            return trace_func(x=data['l'], y=data['b'], mode='markers', marker=dict(size=5, color=data['near_far_numeric'], colorscale='RdBu_r', symbol=symbol, opacity=0.8), name=name)
-        elif view == 'l-v':
-            return trace_func(x=data['l'], y=data['v'], mode='markers', marker=dict(size=5, color=data['near_far_numeric'], colorscale='RdBu_r', symbol=symbol, opacity=0.8), name=name)
-        elif view == 'b-v':
-            return trace_func(x=data['b'], y=data['v'], mode='markers', marker=dict(size=5, color=data['near_far_numeric'], colorscale='RdBu_r', symbol=symbol, opacity=0.8), name=name)
+        elif view in ['l-b', 'l-v', 'b-v']:
+            x = data['l'] if 'l' in view else data['b']
+            y = data['v'] if 'v' in view else data['b']
+            return trace_func(
+                x=x, y=y,
+                mode='markers',
+                marker=dict(
+                    size=5,
+                    color=data['near_far_numeric'],
+                    colorscale='RdBu_r',
+                    symbol=symbol,
+                    opacity=0.8
+                ),
+                name=name
+            )
 
     fig.add_trace(add_trace(model['data'], f'Model: {model["name"]}', 'circle'))
     fig.add_trace(add_trace(catalogue['data'], f'Data: {catalogue["name"]}', catalogue['symbol']))
 
+    all_data = pd.concat([model['data'], catalogue['data']])
+    l_range = [all_data['l'].min(), all_data['l'].max()]
+    b_range = [all_data['b'].min(), all_data['b'].max()]
+    v_range = [all_data['v'].min(), all_data['v'].max()]
+
+    layout.update(
+        xaxis=dict(range=l_range if 'l' in view else b_range),
+        yaxis=dict(range=b_range if view == 'l-b' else v_range)
+    )
+
+    if view == '3-D (l-b-v)':
+        layout['scene'].update(
+            xaxis=dict(range=l_range),
+            yaxis=dict(range=b_range),
+            zaxis=dict(range=v_range)
+        )
+
     fig.update_layout(
-        height=800,
-        width=800,
+        height=650,
         title_text=f"{model['name']} {view} view",
+        legend=dict(
+            orientation="h",
+            yanchor="top",
+            y=-0.1,
+            xanchor="center",
+            x=0.5
+        ),
+        margin=dict(l=0, r=0, t=30, b=100),
         **layout
     )
     return fig
