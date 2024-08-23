@@ -113,7 +113,7 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
         )
 
     fig.update_layout(
-        height=650,
+        height=900,
         title_text=f"{model['name']} {view} view",
         legend=dict(
             orientation="h",
@@ -194,7 +194,7 @@ def main():
         fig.update_layout(
             autosize=True,
             margin=dict(l=0, r=0, t=30, b=0),
-            height=700,
+            height=900,
         )
 
         st.plotly_chart(fig, use_container_width=True, config={'responsive': True})
