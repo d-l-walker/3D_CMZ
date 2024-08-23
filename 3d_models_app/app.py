@@ -131,7 +131,7 @@ def main():
     selected_catalogue = next((catalogue for catalogue in catalogues if catalogue['name'] == selected_catalogue_name), None)
 
     view_options = ['3-D (l-b-v)', 'l-b', 'l-v', 'b-v']
-    selected_view = st.radio("Select view:", view_options, index=0)
+    selected_view = st.radio("Select view:", view_options, index=0, horizontal=True)
 
     if selected_model and selected_catalogue:
         fig = plot_interactive(selected_model, selected_catalogue, view=selected_view)
