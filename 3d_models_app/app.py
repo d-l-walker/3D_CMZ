@@ -75,7 +75,7 @@ def main():
     catalogues = [
         {
             'name': 'Walker et al. 2024',
-            'data': preprocess_data(load_data('updated-catalogue.txt', sep=',')),
+            'data': preprocess_data(load_data('walker-catalogue.txt', sep=',')),
             'symbol': 'x'
         },
         {
