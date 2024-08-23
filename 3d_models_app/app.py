@@ -131,17 +131,21 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
 def main():
     st.title("3-D CMZ Models")
 
+    
     st.markdown("""
     This interactive tool shows four models of the 3-D geometry of the CMZ:
-    * Ellipse (from [Walker et al. 2024](#))
-    * KDL (from [Kruijssen et al. 2024](#))
-    * Sofue (from [Sofue et al. 1995](#))
-    * Molinari (from [Molinari et al. 2011](#))
 
-    Along with two cloud catalogues from [Lipman et al. (2024)](#) and [Walker et al. (2024)](#).
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div>• Ellipse (from <a href="#">Walker et al. 2024</a>)</div>
+        <div>• KDL (from <a href="#">Kruijssen et al. 2024</a>)</div>
+        <div>• Sofue (from <a href="#">Sofue et al. 1995</a>)</div>
+        <div>• Molinari (from <a href="#">Molinari et al. 2011</a>)</div>
+    </div>
 
-    For more information on the 3-D CMZ project and associated data, code, and publications, please visit [centralmolecularzone.github.io/3D_CMZ/](https://centralmolecularzone.github.io/3D_CMZ/)
-    """)
+    Along with two cloud catalogues from <a href="#">Lipman et al. (2024)</a> and <a href="#">Walker et al. (2024)</a>.
+
+    For more information on the 3-D CMZ project and associated data, code, and publications, please visit <a href="https://centralmolecularzone.github.io/3D_CMZ/">https://centralmolecularzone.github.io/3D_CMZ/</a>
+    """, unsafe_allow_html=True)
 
     catalogues = [
         {
