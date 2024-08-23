@@ -205,12 +205,12 @@ def main():
     st.markdown("""
     This interactive tool shows four models of the 3-D geometry of the CMZ. Blue points represent the near side of the CMZ, while red points represent the far side. The models are:
                 
-    * An open, eccentric orbit (KDL; [Kruijssen et al. 2014](#))
-    * Two nuclear spiral arms (Sofue; [Sofue et al. 1995](#))
-    * A closed, vertically-oscillating elliptical orbit with constant angular momentum (Ellipse; [Walker et al. 2024](#))
-    * A closed, vertically-oscillating elliptical orbit with constant orbital velocity (Molinari; [Molinari et al. 2011](#))
+    * An open, eccentric orbit (KDL; [Kruijssen et al. 2015](https://ui.adsabs.harvard.edu/abs/2015MNRAS.447.1059K/abstract))
+    * Two nuclear spiral arms (Sofue; [Sofue et al. 1995](https://ui.adsabs.harvard.edu/abs/1995PASJ...47..527S/abstract))
+    * A closed, vertically-oscillating elliptical orbit with constant angular momentum (Ellipse; [Walker et al. 2024](https://centralmolecularzone.github.io/3D_CMZ/))
+    * A closed, vertically-oscillating elliptical orbit with constant orbital velocity (Molinari; [Molinari et al. 2011](https://ui.adsabs.harvard.edu/abs/2011ApJ...735L..33M/abstract))
 
-    Overlaid as 'x' markers are two CMZ cloud catalogues from [Lipman et al. (2024)](#) and [Walker et al. (2024)](#). The marker colour indicates whether the cloud is determined to be on the near (blue) or far (red) side of the CMZ. Please see the associated publications for more information on the models and catalogues, and a detailed comparison between them.
+    Overlaid as 'x' markers are two CMZ cloud catalogues from [Lipman et al. (2024)](https://centralmolecularzone.github.io/3D_CMZ/) and [Walker et al. (2024)](https://centralmolecularzone.github.io/3D_CMZ/). The marker colour indicates whether the cloud is determined to be on the near (blue) or far (red) side of the CMZ. Please see the associated publications for more information on the models and catalogues, and a detailed comparison between them.
 
     For more information on the 3-D CMZ project and associated data, code, and publications, please visit [centralmolecularzone.github.io/3D_CMZ/](https://centralmolecularzone.github.io/3D_CMZ/)
     """)
