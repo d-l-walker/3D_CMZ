@@ -133,18 +133,15 @@ def main():
     
     st.markdown("""
     This interactive tool shows four models of the 3-D geometry of the CMZ:
+    * A closed, vertically-oscillating elliptical orbit with constant angular momentum (Ellipse; [Walker et al. 2024](#))
+    * An open, eccentric orbit (KDL; [Kruijssen et al. 2024](#))
+    * Two nuclear spiral arms (Sofue; [Sofue et al. 1995](#))
+    * A closed, vertically-oscillating elliptical orbit with constant orbital velocity (Molinari; [Molinari et al. 2011](#))
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0;">
-        <div>• Ellipse (from <a href="#">Walker et al. 2024</a>)</div>
-        <div>• KDL (from <a href="#">Kruijssen et al. 2024</a>)</div>
-        <div>• Sofue (from <a href="#">Sofue et al. 1995</a>)</div>
-        <div>• Molinari (from <a href="#">Molinari et al. 2011</a>)</div>
-    </div>
+    Along with two cloud catalogues from [Lipman et al. (2024)](#) and [Walker et al. (2024)](#).
 
-    <p style="margin-top: 20px;">Along with two cloud catalogues from <a href="#">Lipman et al. (2024)</a> and <a href="#">Walker et al. (2024)</a>.</p>
-
-    <p>For more information on the 3-D CMZ project and associated data, code, and publications, please visit <a href="https://centralmolecularzone.github.io/3D_CMZ/">centralmolecularzone.github.io/3D_CMZ/</a></p>
-    """, unsafe_allow_html=True)
+    For more information on the 3-D CMZ project and associated data, code, and publications, please visit [centralmolecularzone.github.io/3D_CMZ/](https://centralmolecularzone.github.io/3D_CMZ/)
+    """)
 
     catalogues = [
         {
