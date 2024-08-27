@@ -38,8 +38,8 @@ def plot_interactive(model, catalogue, view='3-D (l-b-v)'):
                     eye=dict(x=1.5, y=1.5, z=1.5),
                     center=dict(x=0, y=0, z=0)
                 ),
-                aspectmode='cube'
-                # dragmode='orbit'
+                aspectmode='cube',
+                dragmode='turntable'
             )
         )
     elif view == 'l-b':
